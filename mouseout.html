@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MouseOut</title>
+    <style>
+        body{
+            background-color: blue;
+        }
+
+        canvas{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<center>
+        <canvas width="600" height="600" id="myCanvas"></canvas>
+       
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        var Cuadrado = false;
+        var figura = false;
+        var lienzo = false;
+        
+        canvas.addEventListener("mouseover",(e) =>{
+            console.log("Mouseover");
+            ctx.fillStyle = randomRgbColor();
+        })
+        canvas.addEventListener("mouseenter", function() {
+            lienzo = true;
+        });
+        canvas.addEventListener("mouseout",(e) =>{
+            console.log("Mouseout");
+            lienzo = false;
+            figura = false;
+        })
+       
+        canvas.addEventListener("mousedown", function(e) {
+            if (lienzo && !figura) {
+                figura = true;
+                ctx.fillStyle = randomRgbColor();
+                if (Cuadrado) {
+                    ctx.fillRect(e.layerX -430,e.layerY-50,100,100);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(e.offsetX ,e.offsetY ,50 ,0 ,2*Math.PI);
+                    ctx.fill();
+                }
+                Cuadrado = !Cuadrado;
+            }
+        });
+
+        function randomRgbColor(){
+            var o = Math.round;
+            var r = Math.random;
+            var rgb=  255;
+            return "rgba("+o(r()*rgb)+","+o(r()*rgb)+","+o(r()*rgb)+",0.5)";
+        }
+       
+    </script>  
+</center>     
+</body>
+</html>

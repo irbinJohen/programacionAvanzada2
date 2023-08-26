@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'avatar'</title>
+    <style>
+        canvas{
+            background-color: white;
+        }
+
+        body{
+            background-color: rgb(120, 151, 197);
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <canvas width="600" height="600" id="myCanvas"></canvas>
+    
+    
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        //cuello 
+        ctx.fillStyle = "#FFA55F";
+        ctx.fillRect(280,175, 40,20);
+
+        // cabeza
+        ctx.beginPath();
+        ctx.fillStyle= "#FFA55F";
+        ctx.arc(300, 130, 50, 0,  Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+        //boca
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(290, 140, 25, 0.3 * Math.PI, 0.6 * Math.PI);
+        ctx.stroke();
+
+        //pelo
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.arc(300, 130, 50, 1.2 * Math.PI, 0.0 * Math.PI);
+        ctx.stroke();
+
+        //pelo
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(310,67);
+        ctx.lineTo(250,100);
+        ctx.lineTo(305,110);
+        ctx.lineTo(360,130);
+        ctx.fill();
+        ctx.closePath()
+        
+        //ojo
+        ctx.beginPath();
+        ctx.fillStyle= "black";
+        ctx.arc(272, 120, 8, 0,  Math.PI*2);
+        ctx.arc(300, 120, 8, 0,  Math.PI*2);
+        ctx.fill();
+        ctx.closePath();
+
+        //cuerpo
+        ctx.fillStyle = "red";
+        ctx.fillRect(245,185, 110,120);
+        ctx.fillRect(210,185, 40,40);
+        ctx.fillRect(350,185, 40,40);
+
+        //pantalon    
+        ctx.fillStyle = "#2E64FE";
+        ctx.fillRect(245,305, 110,150);
+       // ctx.strokeRect(245,305,110,150);
+        //piernas
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.moveTo(300,350);
+        ctx.lineTo(315,455);
+        ctx.lineTo(280,455);
+        ctx.fill();
+        ctx.closePath()
+
+        // brazo izquierdo
+        // primer abajo
+        // segundo deracha izquierda
+        ctx.fillStyle = "#FFA55F";
+        ctx.beginPath();
+        ctx.moveTo(245,225);
+        ctx.lineTo(210,220);
+        ctx.lineTo(210,300);
+        ctx.lineTo(235,300);
+        ctx.fill();
+        ctx.closePath()
+         //zapatos y cinto
+         ctx.fillStyle = "black";
+        ctx.fillRect(220,455, 60,25);
+        ctx.fillRect(300,455, 60,25);
+        ctx.fillRect(245,305, 110,10);
+        // brazo derecho
+        // primer abajo
+        // segundo deracha izquierda
+        ctx.fillStyle = "#FFA55F";
+        ctx.beginPath();
+        ctx.moveTo(390,225);
+        ctx.lineTo(355,220);
+        ctx.lineTo(325,320);
+        ctx.lineTo(350,320);
+        ctx.fill();
+        ctx.closePath()
+        // manos
+        ctx.beginPath();
+        ctx.fillStyle= "#FFA55F";
+        ctx.arc(223, 300, 13, 0,  Math.PI*2);
+        ctx.fill();
+        ctx.closePath();
+
+        //TEXTO 
+        ctx.font = "46px arial ";
+        ctx.fillText("IRBIN JOHEN",150, 50)
+       
+    </script>
+    </center>
+</body>

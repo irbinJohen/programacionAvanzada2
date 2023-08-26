@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MouseOver</title>
+    <style>
+        body{
+            background-color: black;
+        }
+
+        canvas{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<center>
+        <canvas width="600" height="600" id="myCanvas"></canvas>
+       
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        
+        canvas.addEventListener("mouseover",(e) =>{
+            console.log("Mouseover");
+   
+            ctx.fillStyle = randomRgbColor();
+        })
+        canvas.addEventListener("mousedown",(e) =>{
+            console.log("mousedown");
+            console.log(e);
+            ctx.fillStyle = randomRgbColor;
+            ctx.beginPath();
+            ctx.arc(e.offsetX ,e.offsetY ,50 ,0 ,2*Math.PI);
+            ctx.fill();
+            ctx.stroke(); 
+        })
+        function randomRgbColor(){
+            var o = Math.round;
+            var r = Math.random;
+            var rgb=  255;
+            return "rgba("+o(r()*rgb)+","+o(r()*rgb)+","+o(r()*rgb)+",0.5)";
+        }
+       
+    </script>  
+</center>     
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evenclick</title>
+    <style>
+        body{
+            background-color: black;
+        }
+
+        canvas{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<center>
+        <canvas width="600" height="600" id="myCanvas"></canvas>
+       
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        
+        canvas.addEventListener("mouseover",() =>{
+            console.log("Mouseover");
+            // Obtiene las coordenadas del mouse
+   // var mouseX = e.clientX - canvas.offsetLeft;
+   // var mouseY = e.clientY - canvas.offsetTop;
+            ctx.fillStyle = randomRgbColor();
+        })
+
+        canvas.addEventListener("mouseout",(e) =>{
+            console.log("Mouseout");
+        })
+
+        canvas.addEventListener("mousemove",(e) =>{
+            console.log("Mousemove");
+        })
+        
+        canvas.addEventListener("mousedown",(e) =>{
+            console.log("mousedown");
+            console.log(e);
+            //ctx.fillStyle = color;
+
+            //if(fig){
+            ctx.beginPath();
+            ctx.arc(e.layerX-380 ,e.layerY ,50 ,0 ,2*Math.PI);
+            ctx.fillStyle = "rgba(51,204,153,0.4)";
+            ctx.fill();
+            ctx.strokeStyle = "white";
+            ctx.stroke();
+            ctx.closePath();
+            //}else{
+               // ctx.fillStyle(e.layerX -380,e.layerY,100,100);
+              //  ctx.fillRect(e.layerX -380,e.layerY,100,100);
+            //}
+        })
+        function randomRgbColor(){
+            var o = Math.round;
+            var r= Math.random;
+            var r= randonInteger (255);
+           
+            return "rgba("+o(ra()*r)+","+g+","+b+",0.5)";
+        }
+        
+    </script>  
+</center>     
+</body>
+</html>

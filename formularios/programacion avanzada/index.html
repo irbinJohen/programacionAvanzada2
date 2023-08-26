@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'mi canvas'</title>
+    <style>
+        canvas{
+            background-color: gray;
+        }
+
+        body{
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <canvas width="600" height="600" id="myCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+// cuadro verde
+        ctx.fillStyle = "#4BE117";
+        ctx.fillRect(200,200, 80,80);
+//cuadro borde
+        ctx.strokeRect(280,280,80,80);
+//cuadro azul
+        ctx.fillStyle = "#46B5F9";
+        ctx.fillRect(100,100,80,80);
+        
+        ctx.fillStyle = "#3E2EE1";
+        ctx.fillRect(140,140,80,80);
+
+//triangulo
+        ctx.fillStyle = "#4BE117";
+        ctx.beginPath();
+        ctx.moveTo(220,40);
+        ctx.lineTo(260,80);
+        ctx.lineTo(180,80);
+        ctx.fill();
+        ctx.closePath()
+   
+    </script>
+    </center>
+</body>
+</html>

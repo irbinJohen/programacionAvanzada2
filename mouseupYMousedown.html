@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MouseMoveyMousedown</title>
+    <style>
+        body{
+            background-color: rgb(212, 209, 4);
+        }
+
+        canvas{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<center>
+        <canvas width="600" height="600" id="myCanvas"></canvas>
+       
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        var Cuadrado,figura,lienzo,pintando = false;
+         
+        canvas.addEventListener("mouseover",(e) =>{
+            ctx.fillStyle = randomRgbColor();
+        })
+        canvas.addEventListener("mouseenter", function(e) {
+            lienzo = true;
+        });
+        canvas.addEventListener("mouseout",(e) =>{
+            lienzo = false;
+            figura = false;
+            pintando = false
+        })
+        canvas.addEventListener("mouseup",(e) =>{
+            pintando = false
+        })
+        canvas.addEventListener("mousemove",(e) =>{
+         if (pintando) {
+             ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+  }
+        })
+        
+        canvas.addEventListener("mousedown", function(e) {
+            
+            ctx.fillStyle = randomRgbColor();
+            if (lienzo && !figura) {
+                figura = true;
+                ctx.fillRect(e.layerX -430,e.layerY-50,100,100);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(e.offsetX ,e.offsetY ,50 ,0 ,2*Math.PI);            
+                    ctx.fill();
+                }
+                Cuadrado = !Cuadrado;
+        });
+        function comenzarPintar(e) {
+        pintando = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+}
+
+canvas.addEventListener('mousedown', comenzarPintar);
+
+        function randomRgbColor(){
+            var o = Math.round;
+            var r = Math.random;
+            var rgb=  255;
+            return "rgba("+o(r()*rgb)+","+o(r()*rgb)+","+o(r()*rgb)+",0.5)";
+        }
+       
+    </script>  
+</center>     
+</body>
+</html>

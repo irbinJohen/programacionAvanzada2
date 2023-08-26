@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'moveTo, lineTo y stroke '</title>
+    <style>
+        canvas{
+            background-color: white;
+        }
+
+        body{
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <canvas width="600" height="600" id="myCanvas"></canvas>
+    
+    
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+
+        // CIRCULOS
+        ctx.beginPath();
+        ctx.fillStyle= "red";
+        ctx.arc(450, 110, 50, 0,  Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.strokeStyle= "black";
+        ctx.arc(500, 110, 50, 0,Math.PI*2);
+        ctx.stroke();
+        //TEXTO 
+        
+        ctx.font = "46px arial ";
+        ctx.fillText("hola IRBIN JOHEN",150, 50)
+        ctx.strokeStyle = "#FFBF00";
+        ctx.strokeText("hola IRBIN JOHEN",150, 53)
+        
+        //rectangulo de colores
+        var grd = ctx.createLinearGradient(100,75,250,100);
+        grd.addColorStop(0,"#FF0000");
+        grd.addColorStop(0.6,"#04B4AE");
+        grd.addColorStop(0.9,"#0000FF");
+        grd.addColorStop(1,"#DF01D7");
+        ctx.fillStyle = grd;
+        ctx.fillRect(100,75,250,100);
+
+        //radial gradient dentro de un rectángulo
+        var grd2 = ctx.createRadialGradient(140,260,5,150,260,80);
+        grd2.addColorStop(0,"red");
+        grd2.addColorStop(1,"white");
+        ctx.fillStyle = grd2;
+        ctx.fillRect(70,180,160,160);
+
+        // cargar imagen
+        const image = new Image(80, 45);
+        image.onload = drawImageActualSize;
+        image.src = "github.jpg";
+        function drawImageActualSize() {
+        ctx.drawImage(this, 240, 200);
+        ctx.drawImage(this, 240, 200, this.width, this.height);
+        }
+    </script>
+    </center>
+</body>
+</html>

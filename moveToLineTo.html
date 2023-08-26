@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'moveTo, lineTo y stroke '</title>
+    <style>
+        canvas{
+            background-color: white;
+        }
+
+        body{
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <canvas width="600" height="600" id="myCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+             
+//triangulo
+        ctx.fillStyle = "#F39DFB";
+        ctx.moveTo(235,140);
+        ctx.lineTo(290,250);
+        ctx.lineTo(430,260);
+        //muestra relleno
+        ctx.fill();
+
+        //linea 
+        ctx.strokeStyle= "gray";
+        ctx.moveTo(160,70);
+        ctx.lineTo(360,210);
+        //dijujar trazo
+        ctx.stroke();
+        //linea recta
+        ctx.stroke(160,20,1,200);   
+    </script>
+    </center>
+</body>
+</html>
