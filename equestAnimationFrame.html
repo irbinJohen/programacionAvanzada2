@@ -5,7 +5,7 @@
     <title>eqyuesAnimationFrame</title>
     <style>
         body{
-            background-color: rgb(224, 90, 0);
+            background-color: rgb(88, 18, 218);
         }
 
         canvas{
@@ -58,20 +58,32 @@
            
         });
 
-        function update() 
-        {
+        function update() {
+
             switch(dir){
                 case 1:
-                    y-=10;
+                    y-=5;
+                    if(y+50<0){
+                        y=600;
+                    }
                 break;    
                 case 2:
-                    y+=10;
+                    y+=5;
+                    if(y+50>600){
+                        y=-50;
+                    }
                 break;
                 case 3:
-                    x+=10;
+                    x+=5;
+                    if(x+50>600){
+                        x=-50;
+                    }
                 break;
                 case 4:
-                    x-=10;
+                    x-=5;
+                    if(x+50<0){
+                        x=600;
+                    }
                 break;
                 }
         paint();
