@@ -25,7 +25,7 @@
     <script>
         const canvas = document.getElementById("myCanvas");
         const ctx = canvas.getContext("2d");
-        var x = 300, y = 300, dir=0; 
+        var x = 300, y = 300, dir=0, speed= 4; 
         var color = randomRgbColor();
 
         window.requestAnimationFrame = (function () {
@@ -36,7 +36,6 @@
             window.setTimeout(callback, 17);
         };
 }());
-
         
         document.addEventListener("keydown", (e) => {
             if (e.keyCode == 87) {
@@ -55,6 +54,10 @@
                 //x += 10;
                 dir =3;
             }
+            if(e.keyCode== 32){
+                speed += 2;
+
+            }
            
         });
 
@@ -62,30 +65,29 @@
 
             switch(dir){
                 case 1:
-                    y-=5;
+                    y-=speed;
                     if(y+50<0){
                         y=600;
                     }
                 break;    
                 case 2:
-                    y+=5;
+                    y+=speed;
                     if(y+50>600){
                         y=-50;
                     }
                 break;
                 case 3:
-                    x+=5;
+                    x+=speed;
                     if(x+50>600){
                         x=-50;
                     }
                 break;
                 case 4:
-                    x-=5;
+                    x-=speed;
                     if(x+50<0){
                         x=600;
                     }
-                break;
-                }
+                break;}
         paint();
         window.requestAnimationFrame(update);
         function paint(){
