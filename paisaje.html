@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'paisaje'</title>
+    <style>
+        canvas{
+            background-color: rgb(23, 86, 145);
+        }
+
+        body{
+            background-color: rgb(233, 163, 58);
+        }
+    </style>
+</head>
+<body>
+    <center>
+    <canvas width="600" height="600" id="myCanvas"></canvas>
+    
+    
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+          //nubes
+          ctx.beginPath();
+        ctx.fillStyle= "white";
+        ctx.arc(80, 140, 30, 0,  Math.PI*2);
+        ctx.closePath();
+        ctx.arc(130, 180, 30, 0,  Math.PI*2);
+        ctx.closePath();
+        ctx.arc(95, 180, 30, 0,  Math.PI*2);
+        ctx.closePath();
+        ctx.arc(120, 130, 30, 0,  Math.PI*2);
+        ctx.closePath();
+        ctx.arc(160, 170, 30, 0,  Math.PI*2);
+        ctx.fill();
+        //techo
+        ctx.fillStyle = "brown";
+        ctx.beginPath();
+        ctx.moveTo(160,300);
+        ctx.lineTo(290,420);
+        ctx.lineTo(30,420);
+        ctx.fill();
+        ctx.closePath()
+        //tronco
+        ctx.fillStyle = "brown";
+        ctx.fillRect(460,420, 160,200);
+        // arbol
+        ctx.beginPath();
+        ctx.fillStyle= "green";
+        ctx.arc(520, 230, 220, 0,  Math.PI*2);
+        ctx.fill();
+       //casa
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(50,420, 220,180);
+        //ventana
+        ctx.strokeStyle = "blue";
+        ctx.strokeRect(75, 460, 30, 30);
+        ctx.strokeRect(75, 491, 30, 30);
+        ctx.strokeRect(105, 491, 30, 30);
+        ctx.strokeRect(105, 460, 30, 30);
+        //puerta
+        ctx.strokeStyle = "brown";
+        ctx.strokeRect(180, 540, 30, 60);
+        ctx.strokeRect(210, 540, 30, 60);
+      
+        //manzana
+        ctx.beginPath();
+        ctx.fillStyle= "red";
+        ctx.arc(530, 140, 17, 0,  Math.PI*2);
+        ctx.closePath();
+        ctx.arc(490, 290, 17, 0,  Math.PI*2);
+        ctx.closePath();
+        ctx.arc(430, 200, 17, 0,  Math.PI*2);
+        ctx.fill();
+        cx.closePath();
+        
+    </script>
+    </center>
+</body>
