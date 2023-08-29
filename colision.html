@@ -1,0 +1,159 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eqyuesAnimationFrame</title>
+    <style>
+        body{
+            background-color: rgb(88, 18, 218);
+        }
+
+        canvas{
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);  
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="myCanvas" width="600" height="600" ></canvas>
+    
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        var x = 300, y = 300, dir=0, speed= 4; 
+        var color = randomRgbColor();
+        var tx =0, ty= 0;
+        var wx = 120, wy = 390;
+
+        window.requestAnimationFrame = (function () {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function (callback) {
+            window.setTimeout(callback, 17);
+        };
+}());
+        
+        document.addEventListener("keydown", (e) => {
+            if (e.keyCode == 87) {
+               // y -= 10;
+               dir =1;
+            }
+            if (e.keyCode == 83) {
+                //y += 10;
+                dir =2;
+            }
+            if (e.keyCode == 65) {
+                //x -= 10;
+                dir =4;
+            }
+            if (e.keyCode == 68) {
+                //x += 10;
+                dir =3;
+            }
+            if(e.keyCode== 32){
+                speed += 2;
+
+            }
+           
+        });
+
+        function update() {
+
+            switch(dir){
+                case 1:
+                    y-=speed;
+                    if(y+50<0){
+                        y=600;
+                    }
+                break;   
+                case 2:
+                    y+=speed;
+                    if(y+50>600){
+                        y=-50;
+                    }
+                break;
+                case 3:
+                    x+=speed;
+                    if(x+50>600){
+                        x=-50;
+                    }
+                break;
+                case 4:
+                    x-=speed;
+                    if(x+50<0){
+                        x=600;
+                    }
+                break;}
+                if(x < wx + 200 && 
+                    x + 50 > wx &&  
+                    y < wy + 50 &&  
+                    y + 50 > wy) 
+                {
+                   if(dir==1){
+                    y-speed;
+                    dir=0;
+                   }
+                   if(dir==2){
+                    y+speed;
+                    dir=0;
+                   }
+                   if(dir==3){
+                    x+speed;
+                    dir=0;
+                   }
+                   if(dir==4){
+                    y-speed;
+                    dir=0;
+                   }
+
+                    
+                }
+                if(x < tx + 50 && 
+                    x + 50 > tx &&  
+                    y < ty + 50 &&  
+                    y + 50 > ty) 
+                {
+                    tx = Math.random()*600;
+                    ty = Math.random()*600;
+                }
+                
+        paint();
+        window.requestAnimationFrame(update);
+        function paint(){
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, 600, 600);
+            color = randomRgbColor();
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, 50, 50);
+            ctx.strokeRect(x,y,50,50);
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(tx, ty, 50, 50);
+            ctx.strokeRect(tx,ty,50,50);  
+
+
+            ctx.fillStyle = "grey ";
+            ctx.fillRect(wx, wy, 200, 50);
+            ctx.strokeRect(wx,wy,200,50); 
+
+        }
+        }
+        function randomRgbColor(){
+            var o = Math.round;
+            var r = Math.random;
+            var rgb=  255;
+            return "rgba("+o(r()*rgb)+","+o(r()*rgb)+","+o(r()*rgb)+",1.5)";
+        }
+
+        update();
+
+    </script>
+
+</body>
+</html>
