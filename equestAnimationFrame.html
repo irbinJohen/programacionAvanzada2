@@ -27,6 +27,7 @@
         const ctx = canvas.getContext("2d");
         var x = 300, y = 300, dir=0, speed= 4; 
         var color = randomRgbColor();
+        var tx =0, ty= 0;
 
         window.requestAnimationFrame = (function () {
     return window.requestAnimationFrame ||
@@ -88,6 +89,15 @@
                         x=600;
                     }
                 break;}
+                if(x < tx + 50 && 
+                    x + 50 > tx &&  
+                    y < ty + 50 &&  
+                    y + 50 > ty) 
+                {
+                    tx = Math.random()*600;
+                    ty = Math.random()*600;
+                }
+                
         paint();
         window.requestAnimationFrame(update);
         function paint(){
@@ -97,6 +107,10 @@
             ctx.fillStyle = color;
             ctx.fillRect(x, y, 50, 50);
             ctx.strokeRect(x,y,50,50);
+
+            ctx.fillStyle = colorgit ;
+            ctx.fillRect(tx, ty, 50, 50);
+            ctx.strokeRect(tx,ty,50,50);            
         }
         }
         function randomRgbColor(){
