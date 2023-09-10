@@ -19,14 +19,14 @@
 
         <img src="fondo.jpg" style="width: 100%;">
 
-        <canvas width="600" height="625" id="myCanvas"></canvas>
+        <canvas width="600" height="630" id="myCanvas"></canvas>
     
         <script>
             
             
             var canvas = document.getElementById('myCanvas');
             var ctx = canvas.getContext('2d');
-            var  dir = 0, speed = 10;
+            var  dir = 0, speed = 8;
             let score = 0;
             let walls = [];
             let pause = false;
@@ -63,6 +63,7 @@
                      ctx.arc(this.x, this.y, 20, 0,  Math.PI*2);
                      ctx.fill();
                      ctx.closePath();
+                     speed=0;
                 }
                 //muros
                 seTocan(otro){
@@ -78,17 +79,65 @@
             }
 
             const player = new Cuadrado(225, 225,50,50); 
-            const target = new Cuadrado(randomInteger(575), randomInteger(575),40,40);
-            
-            
+            const target = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target.speedX = 1; // Ajusta la velocidad en el eje X
+            target.speedY = 0; // Ajusta la velocidad en el eje Y
 
+            
+            //pades alrededor
             walls.push( new Cuadrado(0,0,600,25,"green") )
             walls.push( new Cuadrado(0,0,25,200,"green") )
+
+
             walls.push( new Cuadrado(575,0,25,200,"green") )
             walls.push( new Cuadrado(0,275,25,300,"green") )
             walls.push( new Cuadrado(575,275,25,300,"green") )
-            walls.push( new Cuadrado(0,550,600,40,"green") )
+            walls.push( new Cuadrado(0,565,600,45,"green") )
+            walls.push( new Cuadrado(285,300,10,70,"green") )
 
+           // horizontales
+            function horizontales(x, y){
+            for(i = 0; i<50; i++){
+                walls.push( new Cuadrado(x,y,140,25,"green") )
+            }
+           }
+           horizontales(85, 80)
+           horizontales(370, 80)
+           horizontales(-5, 175)
+           horizontales(370, 175)
+           horizontales(255, 280)
+           horizontales(195, 280)
+           horizontales(80, 360)
+           horizontales(370, 360)
+           horizontales(460,470)
+           horizontales(0,470)
+           horizontales(200,430)
+           horizontales(255,430)
+           //horizontales(0,450)
+
+
+           
+           // verticales
+             function verticales(x, y){
+            for(i = 0; i<50; i++){
+                walls.push( new Cuadrado(x,y,25,90,"green") )
+            }
+           }
+           verticales(280,15)
+           verticales(195,190)
+           verticales(370,190)
+           verticales(80,280)
+           verticales(100,280)
+           verticales(465,280)
+           verticales(485,280)
+           verticales(200,360)
+           verticales(370,360)
+           verticales(280,520)
+           
+           
+           
+
+           
             window.requestAnimationFrame = (function () {
                 return window.requestAnimationFrame ||
                     window.webkitRequestAnimationFrame ||
@@ -97,7 +146,6 @@
                         window.setTimeout(callback, 17);
                     };
             }());
-            
             document.addEventListener("keydown", (e) =>{
 
                 if (!pause) {
@@ -132,6 +180,11 @@
             })
 
             function update(){ 
+                if (!pause) {
+             // Mueve el target
+            target.x -= target.speedX;
+            target.y += target.speedY;
+}
 
                 if (!pause) {
                     if (dir == 1) {
@@ -185,14 +238,17 @@
                             dir = 0;
                         }
 
-                        if (target.seTocan(walls[i])) {
-                            target.x = randomInteger(600);
-                            target.y = randomInteger(600);
-                        }
-
-                    } 
+                    }
 
                 } 
+                for (var i = walls.length - 1; i >= 0; i--) {
+                      if (target.seTocan(walls[i])) {
+        // Cambia la dirección de movimiento de target al chocar con una pared
+                          target.speedX *= -1;
+                          target.speedY *= -1;
+                         }
+                        }
+
 
                 paint(); 
                 window.requestAnimationFrame(update); 
@@ -229,6 +285,7 @@
             function randomInteger(max) {
                 return Math.floor(Math.random()*(max + 1));
             } 
+            
         </script>
     </body>
 </html>
