@@ -1,0 +1,447 @@
+<html>
+    <head>
+        <style>
+            body{
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            background-image: url('fondo.jpg'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            height:100vh ;
+            margin: 0; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+        .canvas-container{
+            display: flex;
+        }
+
+        #canvas{
+            background-color: rgb(93, 173, 195);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);  
+        }
+        #canvas2 {
+            background-color: rgb(212, 175, 55);
+            width: 240;
+            height: 600px; 
+            position: left;
+            display: flex;
+            margin-left: 3px;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+
+        }
+       
+
+        </style>
+    </head>
+    <body>
+       
+        <div class="canvas-container">
+            <canvas width="600" height="600" id="myCanvas"></canvas>
+            <canvas width="140" height="300" id="canvas2"></canvas>
+        </div>
+       
+
+       
+        <script>
+            
+            
+            var canvas = document.getElementById('myCanvas');
+            var ctx = canvas.getContext('2d');
+            const Canvas2 = document.getElementById('Canvas2');
+            const ctx2 = canvas2.getContext('2d');
+            var  dir = 0, speed = 8;
+            let score = 0;
+            let walls = [];
+            let pause = false;
+            let imagen = new Image();
+            let estrella = new Image();
+            let musica = new Audio();
+            let coin = new Audio();
+            let over = new Audio();
+            let moneda = new Image();
+            
+
+            imagen.src="mario.png";
+            estrella.src="fantasma.png";
+            moneda.src = "moneda.png";
+            musica.src= "supermario.mp3";
+            over.src= "over.mp3";
+            coin.src = "coin.mp3";
+
+
+            class Cuadrado{
+
+                constructor(x,y,w,h,c){
+                    this.x = x;
+                    this.y = y;
+                    this.w = w;
+                    this.h = h;
+                    this.c = c;
+                    
+                }
+
+                paint(ctx){
+
+                    ctx.fillStyle = this.c;
+                    ctx.fillRect(this.x,this.y,this.w,this.h);
+                }
+                pintar(ctx){
+                    ctx.beginPath();
+                    ctx.fillStyle= this.c;;
+                     ctx.arc(this.x, this.y, 20, 0,  Math.PI*2);
+                     ctx.fill();
+                     ctx.closePath();
+                     speed=0;
+                }
+                //muros
+                seTocan(otro){
+                    if(this.x < otro.x + otro.w &&  
+                       this.x + this.w > otro.x &&  
+                       this.y < otro.y + otro.h &&   
+                       this.y + this.h > otro.y  ) 
+                    { 
+                        return true;   
+                    }
+                    return false;
+                }
+            }
+
+            const player = new Cuadrado(225, 225,40,40); 
+
+
+            const moneda1 = new Cuadrado(50,50,40,40); 
+
+            const target = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target.speedX = 1; // Ajusta la velocidad en el eje X
+            target.speedY = 0; // Ajusta la velocidad en el eje Y
+            
+            const target2 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target2.speedX = 0; // Ajusta la velocidad en el eje X
+            target2.speedY = 1; // Ajusta la velocidad en el eje Y
+            
+            const target3 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target3.speedX = 1; // Ajusta la velocidad en el eje X
+            target3.speedY = 0; // Ajusta la velocidad en el eje Y
+
+            const target4 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target4.speedX = 0; // Ajusta la velocidad en el eje X
+            target4.speedY = 1; // Ajusta la velocidad en el eje Y
+
+            const target5 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target5.speedX = 0; // Ajusta la velocidad en el eje X
+            target5.speedY = 1; // Ajusta la velocidad en el eje Y
+
+            
+            //pades alrededor
+            walls.push( new Cuadrado(0,0,600,25,"green") )
+            walls.push( new Cuadrado(0,0,25,200,"green") )
+            walls.push( new Cuadrado(575,0,25,200,"green") )
+            walls.push( new Cuadrado(0,275,25,300,"green") )
+            walls.push( new Cuadrado(575,275,25,300,"green") )
+            walls.push( new Cuadrado(0,565,600,45,"green") )
+            walls.push( new Cuadrado(285,300,10,70,"green") )
+
+           // horizontales
+           walls.push( new Cuadrado(85,80,140,25,"green") )
+            function horizontales(x, y){
+            for(i = 0; i<50; i++){
+                walls.push( new Cuadrado(x,y,140,25,"green") )
+            }
+           }
+           horizontales(370, 80)
+           horizontales(-5, 175)
+           horizontales(370, 175)
+           horizontales(255, 280)
+           horizontales(195, 280)
+           horizontales(80, 360)
+           horizontales(370, 360)
+           horizontales(460,470)
+           horizontales(0,470)
+           horizontales(200,430)
+           horizontales(255,430)
+           horizontales(0,450)
+           
+           // verticales
+             function verticales(x, y){
+            for(i = 0; i<50; i++){
+                walls.push( new Cuadrado(x,y,25,90,"green") )
+            }
+           }
+           verticales(280,15)
+           verticales(195,190)
+           verticales(370,190)
+           verticales(465,280)
+           verticales(485,280)
+           verticales(200,360)
+           verticales(370,360)
+           verticales(280,520)
+
+
+           let tiempo = 30;
+
+        const intervaloTiempo = setInterval(() => {
+            if (!pause) {
+                tiempo--;
+                actualizarTiempo();
+            }
+        }, 1000);
+        
+        function actualizarTiempo() {
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+            ctx2.beginPath();
+            ctx2.fillStyle = "white";
+            ctx2.fillRect(0, 0, 600, 600);
+            ctx2.font = "20px Righteous";
+            ctx2.fillStyle = "blue";
+            ctx2.fillText("Puntos: " + score, 10, 25);
+            ctx2.fillText("Tiempo: " + tiempo + " seg", 10, 50);
+            
+
+        }
+    
+            window.requestAnimationFrame = (function () {
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    function (callback) {
+                        window.setTimeout(callback, 17);
+                    };
+            }());
+            document.addEventListener("keydown", (e) =>{
+
+                if (!pause) {
+                    switch(e.keyCode){ 
+                        case 87:
+                            dir = 1;
+                            musica.play();
+                        break;
+                        case 83:
+                            dir = 2;
+                            musica.play();
+                        break;
+                        case 68:
+                            dir = 3;
+                            musica.play();
+                        break; 
+                        case 65:
+                            dir = 4;
+                            musica.play();
+                        break; 
+                      
+                    }  
+                }
+
+                switch(e.keyCode){  
+                    case 32:
+                        pause = !pause;
+                        
+                    break;  
+                }
+
+            })
+
+            function update(){ 
+                if (!pause) {
+                    
+             // Mueve el target
+            target.x += target.speedX;
+            target.y += target.speedY;
+            
+            target2.x += target2.speedX;
+            target2.y += target2.speedY;
+
+            target3.x += target3.speedX;
+            target3.y += target3.speedY;
+
+            target4.x += target4.speedX;
+            target4.y += target4.speedY;
+
+            target5.x += target5.speedX;
+            target5.y += target5.speedY;
+
+}
+
+                if (!pause) {
+                    if (dir == 1) {
+                        player.y-=speed;
+                        if (player.y+50 < 0) {
+                            player.y = 600;
+                        }
+                    }
+                    if (dir == 2) {
+                        player.y+=speed;
+                        if (player.y+50 > 600) {
+                            player.y = -50;
+                        }
+                    }
+                    if (dir == 3) {
+                        player.x+=speed;
+                        if (player.x+50 > 600) {
+                            player.x = -50;
+                        }
+                    }
+                    if (dir == 4) {
+                        player.x-=speed;
+                        if (player.x+50 < 0) {
+                            player.x = 600;
+                        }
+                    } 
+
+                    if (player.seTocan(target)) {
+                        target.x = randomInteger(600);
+                        target.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target2)) {
+                        target2.x = randomInteger(600);
+                        target2.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target3)) {
+                        target3.x = randomInteger(600);
+                        target3.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target4)) {
+                        target4.x = randomInteger(600);
+                        target4.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target5)) {
+                        target5.x = randomInteger(600);
+                        target5.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(moneda1)) {
+                        moneda1.x = randomInteger(600);
+                        coin.play();
+                        score+=10
+                    }
+
+
+                    for (var i = walls.length - 1; i >= 0; i--) { 
+
+                        if (player.seTocan(walls[i])) {
+                            
+
+                            if (dir == 1) {
+                                player.y+=speed;
+                            }
+                            if (dir == 2) {
+                                player.y-=speed;
+                            }
+                            if (dir == 3) {
+                                player.x-=speed;
+                            }
+                            if (dir == 4) {
+                                player.x+=speed;
+                            }
+                            dir = 0;
+                        }
+                        if (moneda1.seTocan(walls[i])) {
+                            moneda1.x = randomInteger(600);
+                            moneda1.y = randomInteger(600);
+                        }
+
+                    }
+
+                } 
+                for (var i = walls.length - 1; i >= 0; i--) {
+                      if (target.seTocan(walls[i])) {
+      
+                          target.speedX *= -1;
+                          target.speedY *= -1;
+                         }
+                        }
+                for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target2.seTocan(walls[i])) {
+                          target2.speedX *= -1;
+                          target2.speedY *= -1;
+                         }
+                        }
+                for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target3.seTocan(walls[i])) {
+                          target3.speedX *= -1;
+                          target3.speedY *= -1;
+                         }
+                        }
+
+                        for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target4.seTocan(walls[i])) {
+                          target4.speedX *= -1;
+                          target4.speedY *= -1;
+                         }
+                        }
+                        for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target5.seTocan(walls[i])) {
+                          target5.speedX *= -1;
+                          target5.speedY *= -1;
+                         }
+                        }
+
+                paint(); 
+                window.requestAnimationFrame(update); 
+            }
+           
+            function paint()
+            {
+                ctx.fillStyle = "#B18904";
+                ctx.fillRect(0,0,600,624);
+                ctx.font = "30px calibri";
+                ctx.fillStyle = "black";
+                ctx.fillText("Escore: "+score, 10, 624 );
+                ctx.drawImage(imagen,player.x,player.y,40,40);
+                ctx.drawImage(estrella ,target.x,target.y,40,40);
+                ctx.drawImage(estrella ,target2.x,target2.y,40,40);
+                ctx.drawImage(estrella ,target3.x,target3.y,40,40);
+                ctx.drawImage(estrella ,target4.x,target4.y,40,40);
+                ctx.drawImage(estrella ,target5.x,target5.y,40,40);
+                ctx.drawImage(estrella ,target5.x,target5.y,40,40);
+                ctx.drawImage(moneda ,moneda1.x,moneda1.y,40,40);
+
+                for (var i = walls.length - 1; i >= 0; i--) {
+                    walls[i].paint(ctx);
+                }
+                if(tiempo==0){
+                    ctx.fillStyle = "rgba(88 ,219,197 ,0.5)";
+                    ctx.fillRect(0,0,600,625);
+                    ctx.font = "40px Georgia";
+                    ctx.fillStyle = "black";
+                    ctx.fillText("G A M E O V E R", 185, 225);
+                    musica.pause();
+                    tiempo.pause();
+                    over.play();
+                                }
+
+                if (pause) {
+
+                    ctx.fillStyle = "rgba(88 ,219,197 ,0.5)";
+                    ctx.fillRect(0,0,600,625);
+                    ctx.font = "40px Georgia";
+                    ctx.fillStyle = "black";
+                    ctx.fillText("P A U S E", 185, 225);
+                    musica.pause();
+                }
+                
+            }
+
+            update();
+
+            function randomInteger(max) {
+                return Math.floor(Math.random()*(max + 1));
+            } 
+
+             
+        </script>
+    </body>
+</html>
