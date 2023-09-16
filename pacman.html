@@ -2,44 +2,87 @@
     <head>
         <style>
             body{
-            background-color: rgb(18, 161, 218);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            background-image: url('fondo.jpg'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            height:100vh ;
+            margin: 0; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
             
         }
+        .canvas-container{
+            display: flex;
+        }
 
-        canvas{
+        #canvas{
             background-color: rgb(93, 173, 195);
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);  
         }
+        #canvas2 {
+            background-color: rgb(212, 175, 55);
+            width: 240;
+            height: 600px; 
+            position: left;
+            display: flex;
+            margin-left: 3px;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+
+        }
+        #pacman{
+            font: 21px Arial, sans-serif;
+            color: #D4AF37;
+            text-align:right;
+            position:fixed; 
+            top: 65px; 
+            left: 790px; 
+        }
+
         </style>
     </head>
     <body>
+       
+        <div class="canvas-container">
+            <canvas width="600" height="600" id="myCanvas"></canvas>
+            <canvas width="140" height="300" id="canvas2"></canvas>
+        </div>
+        <div id="#pacman">==PACMAN== </div>
 
-        <img src="fondo.jpg" style="width: 100%;">
-
-        <canvas width="600" height="630" id="myCanvas"></canvas>
-    
+       
         <script>
             
             
             var canvas = document.getElementById('myCanvas');
             var ctx = canvas.getContext('2d');
+            const Canvas2 = document.getElementById('Canvas2');
+            const ctx2 = canvas2.getContext('2d');
             var  dir = 0, speed = 8;
-            let score = 0;
+            let score = 50;
             let walls = [];
             let pause = false;
             let imagen = new Image();
             let estrella = new Image();
             let musica = new Audio();
+            let coin = new Audio();
+            let moneda = new Image();
             
 
             imagen.src="mario.png";
-            estrella.src="estrella.jpg";
+            estrella.src="fantasma.png";
+            moneda.src = "moneda.png";
             musica.src= "supermario.mp3";
+            coin.src = "coin.mp3";
 
-           
 
             class Cuadrado{
 
@@ -78,17 +121,35 @@
                 }
             }
 
-            const player = new Cuadrado(225, 225,50,50); 
+            const player = new Cuadrado(225, 225,40,40); 
+
+
+            const moneda1 = new Cuadrado(50,50,40,40); 
+
             const target = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
             target.speedX = 1; // Ajusta la velocidad en el eje X
             target.speedY = 0; // Ajusta la velocidad en el eje Y
+            
+            const target2 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target2.speedX = 0; // Ajusta la velocidad en el eje X
+            target2.speedY = 1; // Ajusta la velocidad en el eje Y
+            
+            const target3 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target3.speedX = 1; // Ajusta la velocidad en el eje X
+            target3.speedY = 0; // Ajusta la velocidad en el eje Y
+
+            const target4 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target4.speedX = 0; // Ajusta la velocidad en el eje X
+            target4.speedY = 1; // Ajusta la velocidad en el eje Y
+
+            const target5 = new Cuadrado(randomInteger(600), randomInteger(600),40,40);
+            target5.speedX = 0; // Ajusta la velocidad en el eje X
+            target5.speedY = 1; // Ajusta la velocidad en el eje Y
 
             
             //pades alrededor
             walls.push( new Cuadrado(0,0,600,25,"green") )
             walls.push( new Cuadrado(0,0,25,200,"green") )
-
-
             walls.push( new Cuadrado(575,0,25,200,"green") )
             walls.push( new Cuadrado(0,275,25,300,"green") )
             walls.push( new Cuadrado(575,275,25,300,"green") )
@@ -96,12 +157,12 @@
             walls.push( new Cuadrado(285,300,10,70,"green") )
 
            // horizontales
+           walls.push( new Cuadrado(85,80,140,25,"green") )
             function horizontales(x, y){
             for(i = 0; i<50; i++){
                 walls.push( new Cuadrado(x,y,140,25,"green") )
             }
            }
-           horizontales(85, 80)
            horizontales(370, 80)
            horizontales(-5, 175)
            horizontales(370, 175)
@@ -113,9 +174,7 @@
            horizontales(0,470)
            horizontales(200,430)
            horizontales(255,430)
-           //horizontales(0,450)
-
-
+           horizontales(0,450)
            
            // verticales
              function verticales(x, y){
@@ -126,18 +185,56 @@
            verticales(280,15)
            verticales(195,190)
            verticales(370,190)
-           verticales(80,280)
-           verticales(100,280)
            verticales(465,280)
            verticales(485,280)
            verticales(200,360)
            verticales(370,360)
            verticales(280,520)
-           
-           
-           
 
-           
+
+           let tiempo = 0;
+
+        const intervaloTiempo = setInterval(() => {
+            if (!pause) {
+                tiempo++;
+                actualizarTiempo();
+            }
+        }, 1000);
+        
+        function actualizarTiempo() {
+            // Borra el contenido de canvas2
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+            
+            ctx2.beginPath();
+            ctx2.fillStyle = "beige";
+            ctx2.fillRect(0, 0, 600, 600);
+            ctx2.font = "25px Righteous";
+            ctx2.fillStyle = "blue";
+            ctx2.fillText("Score: " + score, 19, 40);
+
+            // Dibuja el texto en canvas2
+            ctx2.beginPath();
+            ctx2.font = "bold 20px verdana, sans-serif";
+            ctx2.textAlign = "start";
+            ctx2.fillText("Nivel: " + nivel, 20, 100);
+            ctx2.beginPath();
+
+            ctx2.font = "bold 20px verdana, sans-serif";
+            ctx2.textAlign = "start";
+            ctx2.fillText("Vidas: " + vidas, 20, 150); // Mostrar las vidas
+            ctx2.beginPath();
+
+            ctx2.fillStyle = "red";
+            ctx2.font = "30px Arial";
+            const hearts = "♥ ♥ ♥"; // Puedes ajustar el número de corazones
+            ctx2.fillText(hearts, 10, 200);
+            ctx2.beginPath();
+
+            ctx2.fillStyle = "black";
+            ctx2.font = "10px Arial";
+            ctx2.fillText("Tiempo: " + tiempo + " segundos", 5, 280);
+        }
+    
             window.requestAnimationFrame = (function () {
                 return window.requestAnimationFrame ||
                     window.webkitRequestAnimationFrame ||
@@ -181,9 +278,23 @@
 
             function update(){ 
                 if (!pause) {
+                    
              // Mueve el target
-            target.x -= target.speedX;
+            target.x += target.speedX;
             target.y += target.speedY;
+            
+            target2.x += target2.speedX;
+            target2.y += target2.speedY;
+
+            target3.x += target3.speedX;
+            target3.y += target3.speedY;
+
+            target4.x += target4.speedX;
+            target4.y += target4.speedY;
+
+            target5.x += target5.speedX;
+            target5.y += target5.speedY;
+
 }
 
                 if (!pause) {
@@ -215,8 +326,34 @@
                     if (player.seTocan(target)) {
                         target.x = randomInteger(600);
                         target.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target2)) {
+                        target2.x = randomInteger(600);
+                        target2.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target3)) {
+                        target3.x = randomInteger(600);
+                        target3.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target4)) {
+                        target4.x = randomInteger(600);
+                        target4.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(target5)) {
+                        target5.x = randomInteger(600);
+                        target5.y = randomInteger(600);
+                        score-=10
+                    }
+                    if (player.seTocan(moneda1)) {
+                        moneda1.x = randomInteger(600);
+                        coin.play();
                         score+=10
                     }
+
 
                     for (var i = walls.length - 1; i >= 0; i--) { 
 
@@ -237,6 +374,10 @@
                             }
                             dir = 0;
                         }
+                        if (moneda1.seTocan(walls[i])) {
+                            moneda1.x = randomInteger(600);
+                            moneda1.y = randomInteger(600);
+                        }
 
                     }
 
@@ -246,6 +387,35 @@
         // Cambia la dirección de movimiento de target al chocar con una pared
                           target.speedX *= -1;
                           target.speedY *= -1;
+                         }
+                        }
+                for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target2.seTocan(walls[i])) {
+        // Cambia la dirección de movimiento de target al chocar con una pared
+                          target2.speedX *= -1;
+                          target2.speedY *= -1;
+                         }
+                        }
+                for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target3.seTocan(walls[i])) {
+        // Cambia la dirección de movimiento de target al chocar con una pared
+                          target3.speedX *= -1;
+                          target3.speedY *= -1;
+                         }
+                        }
+
+                        for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target4.seTocan(walls[i])) {
+        // Cambia la dirección de movimiento de target al chocar con una pared
+                          target4.speedX *= -1;
+                          target4.speedY *= -1;
+                         }
+                        }
+                        for (var i = walls.length - 1; i >= 0; i--) {
+                     if (target5.seTocan(walls[i])) {
+        // Cambia la dirección de movimiento de target al chocar con una pared
+                          target5.speedX *= -1;
+                          target5.speedY *= -1;
                          }
                         }
 
@@ -262,8 +432,14 @@
                 ctx.font = "30px calibri";
                 ctx.fillStyle = "black";
                 ctx.fillText("Escore: "+score, 10, 624 );
-                ctx.drawImage(imagen,player.x,player.y,50,50);
-                ctx.drawImage(estrella ,target.x,target.y,50,50);
+                ctx.drawImage(imagen,player.x,player.y,40,40);
+                ctx.drawImage(estrella ,target.x,target.y,40,40);
+                ctx.drawImage(estrella ,target2.x,target2.y,40,40);
+                ctx.drawImage(estrella ,target3.x,target3.y,40,40);
+                ctx.drawImage(estrella ,target4.x,target4.y,40,40);
+                ctx.drawImage(estrella ,target5.x,target5.y,40,40);
+                ctx.drawImage(estrella ,target5.x,target5.y,40,40);
+                ctx.drawImage(moneda ,moneda1.x,moneda1.y,40,40);
 
                 for (var i = walls.length - 1; i >= 0; i--) {
                     walls[i].paint(ctx);
@@ -285,7 +461,8 @@
             function randomInteger(max) {
                 return Math.floor(Math.random()*(max + 1));
             } 
-            
+
+             
         </script>
     </body>
 </html>
