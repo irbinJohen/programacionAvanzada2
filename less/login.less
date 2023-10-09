@@ -1,0 +1,67 @@
+/* Definir variables */
+@background-color: #f0f0f0;
+@form-width: 300px;
+@form-padding: 20px;
+@input-height: 40px;
+@input-padding: 10px;
+@button-background: #007bff;
+@button-color: #fff;
+
+
+.login-form{
+    width: 100%;
+    background-color: #007bff;
+    width: @form-width;
+       margin: 0 auto;
+       padding: 10px;
+       background-color: @background-color;
+       border: 1px solid #ccc;
+    //   border-radius: 5px;
+}
+button {
+         width: 100%;
+         height: @input-height;
+         background-color: @button-background;
+         color: @button-color;
+         border: none;
+         border-radius: 3px;
+         cursor: pointer;
+    
+         &:hover {
+           background-color: darken(@button-background, 10%);
+         }
+
+        }
+        #cuadro {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: grey;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(230, 24, 24, 0.2);
+        }
+        input[type="text"] {
+            width: 100px;
+            padding-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        input[type="password"] {
+            width: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        fieldset {
+            margin-bottom: 15px;
+        }
+        legend {
+            font-weight: bold;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
